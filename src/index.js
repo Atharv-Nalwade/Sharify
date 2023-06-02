@@ -1,29 +1,57 @@
-const express = require('express');
+const express = require("express");
+const bodyParser = require("body-parser");
+const path = require('path');
+const AWS = require('aws-sdk');
 const multer = require('multer');
-const path = require('path')
+const multerS3 = require('multer-s3');
+require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 
 const app = express();
 
-// Configure Multer
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const uploadPath = path.join(__dirname, '..', '/uploads');
-    cb(null, uploadPath); // Define the destination folder for uploaded files
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname); // Use the original filename for the uploaded file
-  }
+AWS.config.update({
+  accessKeyId:process.env.AccessKeyId,
+  secretAccessKey:process.env.SecretAccessKey,
+  region:process.env.Region
 });
 
-const upload = multer({ storage: storage });
+const s3 = new AWS.S3();
 
-// Define the route to handle the file upload
-app.post('/upload', upload.single('file'), function (req, res) {
-  console.log(req.file); // Access the uploaded file details in the 'req.file' object
-  res.send('File uploaded!');
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: process.env.Bucket,
+    key: function (req, file, cb) {
+      cb(null, file.originalname);
+    }
+  })
 });
 
-// Start the server
-app.listen(3000, function () {
-  console.log('Server listening on port 3000');
+
+app.post("/upload",upload.single('file'), (req, res) => {
+    console.log(req.file)
+    res.send("File uploaded to aws s3");
+});
+
+app.get('/download/:filename', function(req, res) {
+  const params = {
+    Bucket:process.env.Bucket,
+    Key: req.params.filename
+  };
+
+  s3.getObject(params, function(err, data) {
+    if (err) {
+      console.log(err);
+      return res.status(500).send('Error retrieving image from S3');
+    }
+    res.attachment(req.params.filename);  // Set the attachment disposition
+    res.set('Content-Type', data.ContentType);      // Set the appropriate content type based on the file's content type
+    res.send(data.Body);    // Send the file data as a download
+  });
+
+  
+});
+
+
+app.listen(3000, () => {
+  console.log("Started server on port 3000");
 });
