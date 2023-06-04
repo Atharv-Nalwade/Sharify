@@ -7,3 +7,4 @@
 # Second Version (Under Dev.)
 - Uses S3 bucket for file storage instead of local storage
 - Uploads are done to files(docx|pdf|codes|....), images(png|jpg|....), or miscallenous folder
+- Refactored the codebase to handle the whole process in a modular fashion.
