@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.post('/upload',UploadController.upload);
 
-router.get('/download/:filename',DownloadController.download);
+router.get('/download/:id',DownloadController.download);
 
 module.exports = router;

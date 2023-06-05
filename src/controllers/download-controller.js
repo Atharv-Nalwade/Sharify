@@ -10,12 +10,18 @@ const downloadService = new DownloadService();
 const s3 = awsConfig.s3;
 
 const download = (req, res) => {
-  const { filename } = req.params;
-
+  const { id } = req.params;
   downloadService
-    .downloadData(filename)
+    .downloadData(id)
     .then((data) => {
-      // Set the appropriate headers and send the file to the client
+      const filename = path.basename(data.Key);
+
+      if (!filename) {
+        console.error("Error retrieving filename from S3");
+        res.status(500).send("Error retrieving filename from S3");
+        return;
+      }
+
       res.attachment(filename);
       res.set("Content-Type", data.ContentType);
       res.send(data.Body);
