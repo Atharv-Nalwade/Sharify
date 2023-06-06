@@ -28,7 +28,12 @@ const download = (req, res) => {
     })
     .catch((err) => {
       console.error("Error retrieving file from S3:", err);
-      res.status(500).send("Error retrieving file from S3");
+      res.status(500).json({
+        success:false,
+        data:{},
+        msg:"File failed to upload",
+        error:err
+      })
     });
 };
 
