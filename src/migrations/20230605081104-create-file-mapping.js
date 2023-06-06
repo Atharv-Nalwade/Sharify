@@ -2,6 +2,9 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
+    await queryInterface.addColumn('FileMappings', 'password', {
+      type: Sequelize.STRING
+    });
     await queryInterface.createTable('FileMappings', {
       id: {
         allowNull: false,
@@ -27,5 +30,6 @@ module.exports = {
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('FileMappings');
+    await queryInterface.removeColumn('FileMappings', 'password');
   }
 };
