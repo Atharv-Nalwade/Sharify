@@ -18,6 +18,7 @@ const upload = multer({
     bucket: process.env.Bucket,
     key: function (req, file, cb) {
       const contentType = file.mimetype;
+      console.log(contentType);
       const imagePatternRegex = /^image\/[a-zA-Z+-]+$/;
       const fileExtensionRegex =
         /\.(pdf|docx|pptx|xlsx|txt|csv|html|css|js|zip|rar|tar|gz|php|py|java|cpp|c|rb|swift|go)$/i;
@@ -33,13 +34,13 @@ const upload = multer({
       }
 
       const destinationPath = `${folder}/${file.originalname}`;
-      // const destinationPath = `${file.originalname}`;
+      console.log(destinationPath);
       cb(null, destinationPath);
     },
   }),
 });
 
 module.exports = {
-  upload: upload,
-  s3: s3,
+  upload,
+  s3,
 };
