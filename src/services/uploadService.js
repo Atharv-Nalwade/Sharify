@@ -1,108 +1,57 @@
-const AwsConfig = require("../config/awsConfig.js");
-const FileMappingRepository = require('../repository/filemapping-repository.js');
+const { upload } = require("../config/awsConfig.js");
+const FileMappingRepository = require("../repository/filemapping-repository.js");
 
 class UploadService {
-
-  constructor(){
-   this.fileMappingRepository = new FileMappingRepository();
+  constructor() {
+    this.fileMappingRepository = new FileMappingRepository();
   }
 
+  async generateId() {
+    try {
+      const idGeneratorModule = await import("../helpers/idGenerator.mjs");
+      const idGenerator = idGeneratorModule.generateId;
+      return idGenerator();
+    } catch (err) {
+      console.log("Some error occurred\n" + err);
+      throw err;
+    }
+  }
 
-  // async uploadData(file, callback) {
-
-  //   let nanoid;
-  //   let path;
-  //   let serviceReturnPayload;
-
-  //   const importIdGenerator = async () => {
-  //     try {
-  //       const idGenerator = await import("../helpers/idGenerator.mjs");
-  //       nanoid = idGenerator.generateId();
-  //     } catch (err) {
-  //       console.log("Some error occurred\n" + err);
-  //     }
-  //   };
-  //   await importIdGenerator();
-
-  //   const AwsUploader = new Promise((res,rej)=>{
-  //     AwsConfig.upload.single("file")(file, null, (err) => {
-  //       if (err) {
-  //         console.error("Error uploading file:", err);
-  //         callback("Error uploading file");
-  //       } else {
-  //         path = file.file.key;
-  //         console.log("File uploaded successfully");
-  //         callback(null);
-  //         res();
-  //       }
-  //     });
-  //   }) 
- 
-  //  AwsUploader.then(async ()=>{
-  //   await this.fileMappingRepository.createMapping({ nanoid, file_path: path });
-  //  })
-
-  //  return new Promise((res,rej)=>{
-  //     serviceReturnPayload={
-  //       id:nanoid
-  //     }
-  //     if(serviceReturnPayload === null || typeof serviceReturnPayload  === 'undefined') {
-  //      rej() 
-  //     }else{
-  //       res(serviceReturnPayload);
-  //     }
-  //  })
-    
-  // }
-
-  async uploadData(file) {
-    let nanoid;
-    let path;
-    let serviceReturnPayload;
-  
-    const importIdGenerator = async () => {
-      try {
-        const idGenerator = await import("../helpers/idGenerator.mjs");
-        nanoid = idGenerator.generateId();
-      } catch (err) {
-        console.log("Some error occurred\n" + err);
-      }
-    };
-    await importIdGenerator();
-  
-    const AwsUploader = new Promise((resolve, reject) => {
-      AwsConfig.upload.single("file")(file, null, (err) => {
+  async uploadFile(file) {
+    return new Promise((resolve, reject) => {
+      upload.single("file")(file, null, (err) => {
         if (err) {
           console.error("Error uploading file:", err);
-          reject(err); // Reject the promise with the error
+          reject(err);
         } else {
-          path = file.file.key;
+          const path = file.file.key;
           console.log("File uploaded successfully");
-          resolve(); // Resolve the promise without any value
+          resolve(path);
         }
       });
     });
-  
-    return new Promise((resolve, reject) => {
-      AwsUploader.then(async () => {
-        await this.fileMappingRepository.createMapping({
-          nanoid,
-          file_path: path,
-        });
-        serviceReturnPayload = {
-          id: nanoid,
-        };
-        if (!serviceReturnPayload) {
-          reject(); // Reject the promise if serviceReturnPayload is null or undefined
-        } else {
-          resolve(serviceReturnPayload); // Resolve the promise with the serviceReturnPayload
-        }
-      }).catch(reject);
-    });
   }
-  
 
+  async createFileMapping(nanoid, path) {
+    try {
+      await this.fileMappingRepository.createMapping({
+        nanoid,
+        file_path: path,
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
 
+  async uploadData(file) {
+    const nanoid = await this.generateId();
+    const path = await this.uploadFile(file);
+    await this.createFileMapping(nanoid, path);
+
+    return {
+      id: nanoid,
+    };
+  }
 }
 
 module.exports = UploadService;

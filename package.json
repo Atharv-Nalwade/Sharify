@@ -19,6 +19,7 @@
     "nanoid": "^4.0.2",
     "nodemon": "^2.0.22",
     "sequelize": "^6.32.0",
-    "sequelize-cli": "^6.6.0"
+    "sequelize-cli": "^6.6.0",
+    "type-is": "^1.6.18"
   }
 }
