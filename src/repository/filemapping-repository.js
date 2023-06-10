@@ -9,7 +9,7 @@ class FileMappingRepository {
       // console.log(mapping);
     } catch (error) {
       console.log(
-        "Somethng wen twrong in CreateMapping function of filemapping repo"
+        "Somethng wen twrong in CreateMapping function of filemapping repo",error
       );
     }
   }

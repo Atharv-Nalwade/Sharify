@@ -16,11 +16,14 @@ class UploadService {
     }
   }
 
-  async createFileMapping(nanoid, path) {
+  async createFileMapping(nanoid, Path,Password,Option) {
     try {
+      console.log(Password,Option);
       await this.fileMappingRepository.createMapping({
         nanoid,
-        file_path: path,
+        file_path: Path,
+        password: Password,
+        options: Option,
       });
     } catch (err) {
       throw err;
@@ -30,19 +33,14 @@ class UploadService {
   async uploadData(Incomingfile,password,option) {
     try {
       const nanoid = await this.generateId();
-      // console.log(req.file);
-      // Log other fields
-      //  let Password = req.body.password;
-      //  let Option = option;
-      console.log("Password:", password);
-      console.log("Option:", option);
-      // console.log("Option:", Option);
+      // console.log("Password:", password);
+      // console.log("Option:", option);
   
       const file = Incomingfile;
       const path = file.location; // Use `file.location` instead of `file.key`
       console.log("File uploaded successfully");
-  
-      await this.createFileMapping(nanoid, path);
+    
+      await this.createFileMapping(nanoid, path,password,option);
   
       return {
         id: nanoid,

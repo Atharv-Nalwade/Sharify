@@ -15,7 +15,9 @@ module.exports = (sequelize, DataTypes) => {
   }
   FileMapping.init({
     nanoid: DataTypes.STRING,
-    file_path: DataTypes.STRING
+    file_path: DataTypes.STRING,
+    password: DataTypes.STRING,
+    options: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'FileMapping',

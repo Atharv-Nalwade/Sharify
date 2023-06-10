@@ -4,8 +4,6 @@ const uploadService = new UploadService();
 
 const uploadController = async (req, res) => {
   try {
-    // console.log(req.file);
-    console.log(req.body);
     const serviceReturnPayload = await uploadService.uploadData(req.file,req.body.password,req.body.option);
     res.status(200).json({
       success: true,
