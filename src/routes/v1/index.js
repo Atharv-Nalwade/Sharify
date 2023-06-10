@@ -1,10 +1,16 @@
 const express = require('express');
+const multer = require('multer');
 const UploadController = require('../../controllers/upload-controller.js');
 const DownloadController = require('../../controllers/download-controller.js');
+const passwordExtractor = require('../../middlewares/password-middleware.js');
 
 const router = express.Router();
 
-router.post('/upload',UploadController.upload);
+const upload = require('../../config/awsConfig.js').upload;
+
+
+router.post('/upload', upload.single('file'),UploadController.uploadController);
+
 
 router.get('/download/:id',DownloadController.download);
 

@@ -1,5 +1,4 @@
-const { upload } = require("../config/awsConfig.js");
-const FileMappingRepository = require("../repository/filemapping-repository.js");
+const FileMappingRepository = require("../repository/filemapping-repository");
 
 class UploadService {
   constructor() {
@@ -17,21 +16,6 @@ class UploadService {
     }
   }
 
-  async uploadFile(file) {
-    return new Promise((resolve, reject) => {
-      upload.single("file")(file, null, (err) => {
-        if (err) {
-          console.error("Error uploading file:", err);
-          reject(err);
-        } else {
-          const path = file.file.key;
-          console.log("File uploaded successfully");
-          resolve(path);
-        }
-      });
-    });
-  }
-
   async createFileMapping(nanoid, path) {
     try {
       await this.fileMappingRepository.createMapping({
@@ -43,15 +27,32 @@ class UploadService {
     }
   }
 
-  async uploadData(file) {
-    const nanoid = await this.generateId();
-    const path = await this.uploadFile(file);
-    await this.createFileMapping(nanoid, path);
-
-    return {
-      id: nanoid,
-    };
+  async uploadData(Incomingfile,password,option) {
+    try {
+      const nanoid = await this.generateId();
+      // console.log(req.file);
+      // Log other fields
+      //  let Password = req.body.password;
+      //  let Option = option;
+      console.log("Password:", password);
+      console.log("Option:", option);
+      // console.log("Option:", Option);
+  
+      const file = Incomingfile;
+      const path = file.location; // Use `file.location` instead of `file.key`
+      console.log("File uploaded successfully");
+  
+      await this.createFileMapping(nanoid, path);
+  
+      return {
+        id: nanoid,
+      };
+    } catch (err) {
+      console.error("Error uploading data:", err);
+      throw err;
+    }
   }
+  
 }
 
 module.exports = UploadService;

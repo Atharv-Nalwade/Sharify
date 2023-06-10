@@ -2,7 +2,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const ApiRoutes = require("./routes/index.js");
 
-
 const SetupAndStartServer = async () => {
   const app = express();
   app.use(bodyParser.json());

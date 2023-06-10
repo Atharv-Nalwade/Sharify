@@ -33,13 +33,12 @@ const upload = multer({
       }
 
       const destinationPath = `${folder}/${file.originalname}`;
-      // const destinationPath = `${file.originalname}`;
       cb(null, destinationPath);
     },
   }),
 });
 
 module.exports = {
-  upload: upload,
-  s3: s3,
+  upload,
+  s3,
 };

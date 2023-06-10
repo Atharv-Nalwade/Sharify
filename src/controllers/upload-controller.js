@@ -1,10 +1,12 @@
-const UploadService = require("../services/uploadService.js");
+const UploadService = require("../services/UploadService");
 
 const uploadService = new UploadService();
 
-const upload = async (req, res) => {
+const uploadController = async (req, res) => {
   try {
-    const serviceReturnPayload = await uploadService.uploadData(req);
+    // console.log(req.file);
+    console.log(req.body);
+    const serviceReturnPayload = await uploadService.uploadData(req.file,req.body.password,req.body.option);
     res.status(200).json({
       success: true,
       data: serviceReturnPayload,
@@ -23,5 +25,5 @@ const upload = async (req, res) => {
 };
 
 module.exports = {
-  upload,
+  uploadController,
 };
