@@ -1,5 +1,5 @@
-const FileMappingRepository = require("../repository/filemapping-repository");
-const hashedPasswordGenerator = require("../helpers/hashedPasswordGenerator");
+const FileMappingRepository = require("../repository/filemapping-repository.js");
+const {hashedPasswordGenerator} = require("../helpers/password-helper.js");
 
 class UploadService {
   constructor() {
@@ -19,6 +19,7 @@ class UploadService {
 
   async createFileMapping(nanoid, Path,Password,Option) {
     try {
+      console.log("Password",Password);
       const hashedPassword = await hashedPasswordGenerator(Password);
       await this.fileMappingRepository.createMapping({
         nanoid,
@@ -36,7 +37,10 @@ class UploadService {
       const nanoid = await this.generateId();
      
       const file = Incomingfile;
-      const path = file.location; // Using `file.location` instead of `file.key`
+      // const path = file.location; // Using `file.location` instead of `file.key`
+      const path = decodeURI(file.location.substring(file.location.indexOf(".amazonaws.com/") + 15));
+      
+      
       console.log("File uploaded successfully");
     
       await this.createFileMapping(nanoid, path,password,option);

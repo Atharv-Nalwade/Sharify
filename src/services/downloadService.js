@@ -2,6 +2,7 @@ const path = require('path');
 const AWS = require('aws-sdk');
 const awsConfig = require('../config/awsConfig');
 const FileMapping = require('../repository/filemapping-repository.js');
+const { passwordVerify } = require('../helpers/password-helper.js');
 
 class DownloadService {
   constructor() {
