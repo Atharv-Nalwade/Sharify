@@ -14,7 +14,7 @@ class FileMappingRepository {
     }
   }
 
-async RetriveById(id) {
+async RetriveFilePathId(id) {
     try {
       const mapping = await FileMapping.findOne({
         where: {
@@ -32,6 +32,23 @@ async RetriveById(id) {
       console.log("Something went wrong in RetriveById of filemapping repo", error);
       return null;
     }
+  }
+
+  async RetrivePasswordById(id) {
+  try {
+    const mapping = await FileMapping.findOne({
+      where: { nanoid: id },
+    });
+    if (mapping) {
+      const password = mapping.password;
+      return password;
+    }else{
+      console.log("File not found.");
+      return null;
+    }
+  } catch (error) {
+     console.log("Something went wrong in RetrivePasswordById of filemapping repo", error);
+  }
   }
   
 }

@@ -10,8 +10,15 @@ class DownloadService {
     this.filemappingRepository = new FileMapping();
   }
 
-  async downloadData(id) {
-    const filePath = await this.filemappingRepository.RetriveById(id);
+  async downloadData(id,options,password) {
+    if(options === "password"){
+       const hashedPassword = await this.filemappingRepository.RetrivePasswordById(id);
+        const passwordMatch = await passwordVerify(password,hashedPassword);
+        if(!passwordMatch){ 
+          throw new Error("Password is incorrect");
+        }   
+    }
+    const filePath = await this.filemappingRepository.RetriveFilePathId(id);
   
     const params = {
       Bucket: process.env.Bucket,

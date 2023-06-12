@@ -11,8 +11,10 @@ const s3 = awsConfig.s3;
 
 const download = (req, res) => {
   const { id } = req.params;
+  const options = req.body.options;
+  const password = req.body.password;
   downloadService
-    .downloadData(id)
+    .downloadData(id,options,password)
     .then((data) => {
       const filename = path.basename(data.Key);
 
@@ -31,7 +33,7 @@ const download = (req, res) => {
       res.status(500).json({
         success:false,
         data:{},
-        msg:"File failed to upload",
+        msg:"File failed to donwload",
         error:err
       })
     });
