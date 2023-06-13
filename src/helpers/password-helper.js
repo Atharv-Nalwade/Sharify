@@ -17,24 +17,21 @@ const hashedPasswordGenerator = async (plainPassword) => {
   }
 };
 
-const passwordVerify = async (IncomingPassword,hashedPassword) => {
+const passwordVerify = async (IncomingPassword, hashedPassword) => {
   try {
-    console.log(IncomingPassword,hashedPassword);
-    console.log(hashedPassword==='$2b$15$0fILrD22fHrVHoSfGp9kzOuJBPefh7lP4QPargJfuXhbJWHAyHIjy');
     const result = await bcrypt.compare(IncomingPassword, hashedPassword);
-    if(result){
+    if (result) {
       return true;
-    }else{
+    } else {
       console.log("Wrong Password enetered");
       throw new Error("Wrong Password enetered");
     }
   } catch (error) {
-       console.log("Something went wrong in passwordVerify ")
+    console.log("Something went wrong in passwordVerify ");
   }
 };
 
-
 module.exports = {
   hashedPasswordGenerator,
-  passwordVerify
+  passwordVerify,
 };
