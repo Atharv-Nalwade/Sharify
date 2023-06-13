@@ -10,7 +10,8 @@ class DownloadService {
     this.filemappingRepository = new FileMapping();
   }
 
-  async downloadData(id, options, password) {
+  async downloadData(id, password) {
+    const options = await this.filemappingRepository.RetriveById(id, "options");
     if (options === "password") {
       const hashedPassword = await this.filemappingRepository.RetriveById(
         id,

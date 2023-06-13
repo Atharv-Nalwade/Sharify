@@ -20,7 +20,10 @@ class UploadService {
   async createFileMapping(nanoid, Path,Password,Option) {
     try {
       console.log("Password",Password);
-      const hashedPassword = await hashedPasswordGenerator(Password);
+      let hashedPassword = null;
+      if(Option==='password'){
+       hashedPassword = await hashedPasswordGenerator(Password);
+      }
       await this.fileMappingRepository.createMapping({
         nanoid,
         file_path: Path,
