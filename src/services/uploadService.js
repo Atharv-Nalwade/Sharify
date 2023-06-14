@@ -19,7 +19,6 @@ class UploadService {
 
   async createFileMapping(nanoid, Path,Password,Option) {
     try {
-      console.log("Password",Password);
       let hashedPassword = null;
       if(Option==='password'){
        hashedPassword = await hashedPasswordGenerator(Password);

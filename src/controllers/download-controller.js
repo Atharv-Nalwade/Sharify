@@ -33,7 +33,7 @@ const download = (req, res) => {
       res.status(500).json({
         success:false,
         data:{},
-        msg:"File failed to donwload",
+        msg:"Failed to donwload the file",
         error:err
       })
     });

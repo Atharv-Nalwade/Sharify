@@ -16,7 +16,7 @@ const uploadController = async (req, res) => {
     res.status(500).json({
       success: false,
       data: {},
-      msg: "File failed to upload",
+      msg: "Failed to upload the file",
       error: err,
     });
   }

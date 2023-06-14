@@ -5,7 +5,6 @@ const saltRounds = process.env.Salt_Rounds;
 
 const hashedPasswordGenerator = async (plainPassword) => {
   try {
-    console.log("plainPassword", plainPassword, "saltRounds", saltRounds);
     const hashedPassword = await bcrypt.hash(
       plainPassword,
       parseInt(saltRounds)
