@@ -34,18 +34,13 @@ class UploadService {
     }
   }
 
-  async uploadData(Incomingfile,password,option) {
+  
+  async uploadData(file, password, option) {
     try {
       const nanoid = await this.generateId();
-     
-      const file = Incomingfile;
-      // const path = file.location; // Using `file.location` instead of `file.key`
       const path = decodeURI(file.location.substring(file.location.indexOf(".amazonaws.com/") + 15));
-      
-      
-      console.log("File uploaded successfully");
-    
-      await this.createFileMapping(nanoid, path,password,option);
+  
+      await this.createFileMapping(nanoid, path, password, option);
   
       return {
         id: nanoid,
@@ -55,6 +50,9 @@ class UploadService {
       throw err;
     }
   }
+  
+  
+  
   
 }
 

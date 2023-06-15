@@ -16,6 +16,7 @@ const upload = multer({
   storage: multerS3({
     s3: s3,
     bucket: process.env.Bucket,
+    contentEncoding: 'gzip',
     key: function (req, file, cb) {
       const contentType = file.mimetype;
       const imagePatternRegex = /^image\/[a-zA-Z+-]+$/;
@@ -33,10 +34,11 @@ const upload = multer({
       }
 
       const destinationPath = `${folder}/${file.originalname}`;
-      cb(null, destinationPath);
+      cb(null, destinationPath); // Remove the .gz extension from the destination path
     },
   }),
 });
+
 
 module.exports = {
   upload,
