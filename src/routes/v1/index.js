@@ -20,7 +20,9 @@ const customUploadMiddleware = async (req, res, next) => {
         // File upload successful, now compress the uploaded file
         try {
           const fileBuffer = req.file.buffer;
-          const compressedBuffer = zlib.gzipSync(fileBuffer);
+          const compressionLevel = zlib.constants.Z_BEST_COMPRESSION;
+
+        const compressedBuffer = zlib.gzipSync(fileBuffer, { level: compressionLevel });
           console.log("Compressed",compressedBuffer.length)
   
           const filePath = `files/${req.file.originalname}.gz`; // Include the .gz extension in the file path
