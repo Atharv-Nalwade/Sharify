@@ -9,3 +9,4 @@
 - Uploads are done to files(docx|pdf|codes|....), images(png|jpg|....), or miscallenous folder
 - Refactored the codebase to handle the whole process in a modular fashion.
 - Migrated the code to associtae every file with a id and thus downloading is done by refering to the id ( previous was filename)
+- Currently trying to compress the file before saving so as to save space
